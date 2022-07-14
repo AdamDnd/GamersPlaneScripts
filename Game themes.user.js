@@ -487,6 +487,10 @@ body.dark button.fancyButton:before{
     content: "\\eaa2";
 }
 
+body .headerbar a, body .headerbar a:active, body .headerbar a:hover, body .headerbar a:visited, body div.headerbar {
+    color: #ff007f;
+}
+
 `
 };
 
