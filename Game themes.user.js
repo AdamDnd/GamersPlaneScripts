@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game theme
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.21
 // @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Game%20themes.user.js
 // @downloadURL  https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Game%20themes.user.js
 // @description  Add styling to character sheets
@@ -518,9 +518,7 @@ body .headerbar a, body .headerbar a:active, body .headerbar a:hover, body .head
 			success:function (data) {
                 var foundTheme = /.*\[spoiler=?\"?.*?\"?\](.*)\[\/spoiler\]/s.exec(data);
                 if ( foundTheme!== null && foundTheme.length==2) {
-                    if(!cachedTheme){
-                        GM_addStyle(foundTheme[1]);
-                    }
+                    GM_addStyle(foundTheme[1]);
                     localStorage.setItem('cachedTheme-'+styleObj.theme,foundTheme[1]);
                 }
 			}
