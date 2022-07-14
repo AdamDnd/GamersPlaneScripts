@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Game themes
+// @name         Game theme
 // @namespace    http://tampermonkey.net/
 // @version      0.14
 // @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Game%20themes.user.js
