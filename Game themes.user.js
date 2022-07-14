@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game theme
 // @namespace    http://tampermonkey.net/
-// @version      0.15
+// @version      0.2
 // @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Game%20themes.user.js
 // @downloadURL  https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Game%20themes.user.js
 // @description  Add styling to character sheets
@@ -13,7 +13,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=gamersplane.com
 // @grant        GM_addStyle
 // ==/UserScript==
-/* globals jQuery, $ */
+/* globals jQuery, $, API_HOST */
 
 (function() {
     'use strict';
@@ -509,8 +509,25 @@ body .headerbar a, body .headerbar a:active, body .headerbar a:hover, body .head
     }
 
     if(styleObj && styleObj.theme){
-        if(styleObj.theme.toLowerCase() in themes){
+        if(Number.isInteger(styleObj.theme)){
+            var cachedTheme=localStorage.getItem('cachedTheme-'+styleObj.theme);
+            if(cachedTheme){
+                GM_addStyle(cachedTheme);
+            }
+            $.ajax({type: 'post',url: API_HOST +'/forums/getPostQuote',xhrFields: {withCredentials: true}, data:{ postID: styleObj.theme},
+			success:function (data) {
+                var foundTheme = /.*\[spoiler=?\"?.*?\"?\](.*)\[\/spoiler\]/s.exec(data);
+                if ( foundTheme!== null && foundTheme.length==2) {
+                    if(!cachedTheme){
+                        GM_addStyle(foundTheme[1]);
+                    }
+                    localStorage.setItem('cachedTheme-'+styleObj.theme,foundTheme[1]);
+                }
+			}
+		});
+        }
+        else if(styleObj.theme.toLowerCase() in themes){
             GM_addStyle(themes[styleObj.theme.toLowerCase()]);
-        };
+        }
     }
 })();
