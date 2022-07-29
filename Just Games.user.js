@@ -15,7 +15,7 @@
 (function() {
     'use strict';
 
-    $('.flexWrapper.mob-order-2').wrapAll("<div class='allYourGames' />");
+    $('.flexWrapper.mob-order-2').wrapAll("<div class='allYourGames mob-order-2' />");
 
     GM_addStyle(`.flexWrapper.mob-order-3,#latestPosts.mob-order-3,#latestPosts.mob-order-2{display:none;}
     @media only screen and (min-width: 601px){
