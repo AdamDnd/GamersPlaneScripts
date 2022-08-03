@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Just Games
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.11
 // @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Just%20Games.user.js
 // @downloadURL  https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Just%20Games.user.js
 // @description  Just the games
@@ -17,7 +17,7 @@
 
     $('.flexWrapper.mob-order-2').wrapAll("<div class='allYourGames mob-order-2' />");
 
-    GM_addStyle(`.flexWrapper.mob-order-3,#latestPosts.mob-order-3,#latestPosts.mob-order-2{display:none;}
+    GM_addStyle(`.flexWrapper.mob-order-3,#latestPosts.mob-order-3,#latestPosts.mob-order-2,.fid10{display:none;}
     @media only screen and (min-width: 601px){
         #hompageRows{
             display:grid;
