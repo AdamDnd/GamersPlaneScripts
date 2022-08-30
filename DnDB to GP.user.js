@@ -2,6 +2,8 @@
 // @name        DnDB to GP
 // @namespace    http://tampermonkey.net/
 // @version      0.1
+// @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/DnDB%20to%20GP.user.js
+// @downloadURL  https://github.com/AdamDnd/GamersPlaneScripts/raw/main/DnDB%20to%20GP.user.js
 // @description  Copy DnDB character sheet to GP
 // @author       Adam
 // @match        https://www.dndbeyond.com/profile/*/characters/*
