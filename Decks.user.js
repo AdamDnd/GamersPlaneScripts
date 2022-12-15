@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Decks
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Decks.user.js
 // @downloadURL  https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Decks.user.js
 // @description  Card decks
@@ -15,12 +15,12 @@
 (function() {
     'use strict';
 
-    var otfDecks=function(cards,curState){
+    var otfDecks=function(chosenDeck,curState){
         //helpers
         /////////LCGRNG Helper
         function LCGRNG(seed) {
             //https://en.wikipedia.org/wiki/Linear_congruential_generator
-            var m = 0x80000000, a = 1103515245, c = 12345, state = seed;
+            var m = 16381, a = 3007, c = 15809, state = seed;
             return {next:function() {state = (a * state + c) % m; return state;} };
         };
         //////////End LCGRNG Helper
@@ -63,7 +63,13 @@
 
         //////////////////////////////
         //deck functionality
-        var deck=cards, deckStateString=curState?curState:'', publicMethods={};
+        var reversible=false;
+        var deck=chosenDeck;
+        if(chosenDeck.cards){
+            deck=chosenDeck.cards;
+            reversible=(chosenDeck.reversible)?true:false;
+        }
+        var deckStateString=curState?curState:'', publicMethods={};
 
         publicMethods.draw =function(n,seed){
             var deckState=Base64.toBinary(deckStateString,deck.length);
@@ -71,12 +77,16 @@
             var remainingCards=deck.map(function(ele,idx){return {card:ele, shufflepos:rng.next(), index:idx}}).filter(function(ele,idx){return !deckState[idx];});
             var shuffled=remainingCards.sort(function(a, b){return a.shufflepos - b.shufflepos;});
             var drawn=shuffled.slice(0,n);
+            var reversed=[];
             drawn.forEach(function(ele){deckState[ele.index]=true;});
+            drawn.forEach(function(ele){reversed.push(reversible && (rng.next()%2)==1);});
 
             return {totalCards:deck.length,
                     remainingCards:remainingCards.length-drawn.length,
                     drawnCards:drawn.map(function(ele){return ele.card;}),
-                    newState:Base64.fromBinary(deckState)};
+                    newState:Base64.fromBinary(deckState),
+                    reversed:reversed
+                   };
         }
 
         return publicMethods;
@@ -105,6 +115,10 @@
         font-family: Neuropol,cursive;
         background: rgb(255,255,255);
         background: linear-gradient(135deg, #ddd 0%, #eee 100%);
+    }
+
+    .otfDeckDrawnCards span.reversed,.otfDeckDrawnCards img.reversed{
+        transform: scale(-1, -1);
     }
 
     .otfDeckDrawnCards span,
@@ -149,11 +163,15 @@
                             var drawnCards=(new otfDecks(chosenDeck,state)).draw(cards,seed);
                             var ret=$('<div><div class="otfDeck"><h3></h3><div class="otfDeckDrawnCards"></div><div class="otfDeckStatus"><span class="otfDeckCardCount"></span> <span class="otfDeckState"></span></div></div></div>');
                             $('h3',ret).text(deck);
-                            drawnCards.drawnCards.forEach(function(ele){
+                            drawnCards.drawnCards.forEach(function(ele,idx){
+                                var addedCard=null;
                                 if(/^http[s]?:\/\/(.)+$/gm.test(ele)){
-                                    $('<img/>').attr('src',ele).appendTo($('.otfDeckDrawnCards',ret));
+                                    addedCard=$('<img/>').attr('src',ele).appendTo($('.otfDeckDrawnCards',ret));
                                 } else {
-                                    $('<span></span>').text(ele).appendTo($('.otfDeckDrawnCards',ret));
+                                    addedCard=$('<span></span>').text(ele).appendTo($('.otfDeckDrawnCards',ret));
+                                }
+                                if(drawnCards.reversed[idx]){
+                                    addedCard.addClass('reversed');
                                 }
                             });
                             $('.otfDeckCardCount',ret).text(drawnCards.remainingCards+'/'+drawnCards.totalCards);
