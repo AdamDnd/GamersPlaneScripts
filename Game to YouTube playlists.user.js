@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Game to YouTube playlists
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Game%20to%20YouTube%20playlists.user.js
 // @downloadURL  https://github.com/AdamDnd/GamersPlaneScripts/raw/main/Game%20to%20YouTube%20playlists.user.js
 // @description  Extract YouTube links from the game threads into YouTube playlists
