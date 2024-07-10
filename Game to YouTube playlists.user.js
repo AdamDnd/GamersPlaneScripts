@@ -36,7 +36,7 @@
                 playListName='Playlist';
             }
             playListName+=' ('+playlist.length+' videos)';
-            $('<a></a>').text(playListName).attr('href','http://www.youtube.com/watch_videos?video_ids='+playlist.toString()).appendTo(li);
+            $('<a target="ytPlaylist"></a>').text(playListName).attr('href','http://www.youtube.com/watch_videos?video_ids='+playlist.toString()).appendTo(li);
         }
     };
     var getPosts=function(threadIndex){
