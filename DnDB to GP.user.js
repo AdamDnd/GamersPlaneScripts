@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        DnDB to GP
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @updateURL    https://github.com/AdamDnd/GamersPlaneScripts/raw/main/DnDB%20to%20GP.user.js
 // @downloadURL  https://github.com/AdamDnd/GamersPlaneScripts/raw/main/DnDB%20to%20GP.user.js
 // @description  Copy DnDB character sheet to GP
@@ -85,7 +85,7 @@
             });
 
             //actions
-            $('.ct-primary-box__tab--actions').click();
+            $('.ct-primary-box menu li button').filter(function() {return $(this).text() === "Actions";}).click();
 
             var attacks=[];
             $('.ddbc-attack-table .ddbc-combat-attack').each(function(){
@@ -106,7 +106,7 @@
 
             var spells=[];
             //spells
-            $('.ct-primary-box__tab--spells').click();
+            $('.ct-primary-box menu li button').filter(function() {return $(this).text() === "Spells";}).click();
             $('.ct-spells-spell:not(:has(.ct-spells-spell__scaled))').each(function(){
                 var pThis=$(this);
                 pThis.click();
@@ -172,12 +172,12 @@
 
 
             //inventory
-            $('.ct-primary-box__tab--equipment').click();
+            $('.ct-primary-box menu li button').filter(function() {return $(this).text() === "Inventory";}).click();
 
             var inventory=[];
             $('.ct-inventory-item').each(function(){
                 var pThis=$(this);
-                var invName=$('.ddbc-item-name',pThis).text();
+                var invName=$('.ct-inventory-item__heading',pThis).text();
                 var invQuantity=$('.ct-inventory-item__quantity',pThis).text();
                 var bbQuantity="";
                 if(invQuantity=="--"){
@@ -196,11 +196,11 @@
             });
 
             //features and traits
-            $('.ct-primary-box__tab--features').click();
+            $('.ct-primary-box menu li button').filter(function() {return $(this).text() === "Features & Traits";}).click();
             getFeatures(features);
 
             //description
-            $('.ct-primary-box__tab--description').click();
+            $('.ct-primary-box menu li button').filter(function() {return $(this).text() === "Background";}).click();
             var background=$('.ct-background__name').text();
 
             var descriptionTraits=[];
@@ -266,12 +266,15 @@
 
         //Add button to menu
         function addGp(){
-            var heading=$('.mm-navbar__menu-list');
+            console.log('adding menu');
+            var heading=$('#mega-menu-target menu');
             if(heading.length==0){
                 setTimeout(addGp,1000);
             }
             else{
+                var lastMenuItemClass=$('li:last a',heading).attr('class');
                 var copyToGpMenu=$('<li class="mm-nav-item"><span class="mm-nav-item__label mm-nav-item__label--link">📋 Copy to GP</span></li>').appendTo(heading);
+                $('span',copyToGpMenu).attr('class',lastMenuItemClass);
                 $('span',copyToGpMenu).on('click',function(){
                     copyToGp();
                 });
